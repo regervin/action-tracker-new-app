@@ -1,83 +1,58 @@
 import React, { useState } from 'react';
 import { ActionItem } from '../types/actionItem';
 
-interface ActionItemFormProps {
-  onSubmit: (item: Omit<ActionItem, 'id' | 'createdAt'>) => void;
-}
-
-export default function ActionItemForm({ onSubmit }: ActionItemFormProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [priority, setPriority] = useState<ActionItem['priority']>('medium');
+const ActionItemForm: React.FC = () => {
+  const [formData, setFormData] = useState({
+    department: '',
+    description: '',
+    assignedTo: '',
+    dueDate: '',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !dueDate) return;
-
-    onSubmit({
-      title: title.trim(),
-      description: description.trim(),
-      dueDate,
-      priority,
-      status: 'pending'
-    });
-
-    setTitle('');
-    setDescription('');
-    setDueDate('');
-    setPriority('medium');
+    // Handle form submission
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md">
-      <div>
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Action item title"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          required
+          placeholder="Department"
+          className="border p-2 rounded"
+          value={formData.department}
+          onChange={(e) => setFormData({ ...formData, department: e.target.value })}
         />
-      </div>
-      <div>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+        <input
+          type="text"
           placeholder="Description"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          rows={3}
+          className="border p-2 rounded"
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
         />
-      </div>
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <div className="flex-1">
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value as ActionItem['priority'])}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="low">Low Priority</option>
-            <option value="medium">Medium Priority</option>
-            <option value="high">High Priority</option>
-          </select>
-        </div>
+        <input
+          type="text"
+          placeholder="Assigned To"
+          className="border p-2 rounded"
+          value={formData.assignedTo}
+          onChange={(e) => setFormData({ ...formData, assignedTo: e.target.value })}
+        />
+        <input
+          type="date"
+          className="border p-2 rounded"
+          value={formData.dueDate}
+          onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+        />
       </div>
       <button
         type="submit"
-        className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
         Add Action Item
       </button>
     </form>
   );
-}
+};
+
+export default ActionItemForm;

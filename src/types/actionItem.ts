@@ -1,3 +1,9 @@
+export interface Department {
+  name: string;
+  responsiblePerson: string;
+  date: string;
+}
+
 export interface ActionItem {
   id: string;
   action: string;
@@ -6,10 +12,4 @@ export interface ActionItem {
   dueDate: string;
   isDone: boolean;
   createdAt: string;
-}
-
-export interface Department {
-  name: string;
-  responsiblePerson: string;
-  date: string;
 }

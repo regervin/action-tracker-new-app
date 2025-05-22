@@ -1,33 +1,30 @@
 import React from 'react';
-import { Todo } from '../types'
-import { FaTrash } from 'react-icons/fa'
+import { Todo } from '../types/todo';
 
 interface TodoItemProps {
-  todo: Todo
-  onToggle: (id: number) => void
-  onDelete: (id: number) => void
+  todo: Todo;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
   return (
-    <div className="flex items-center gap-2 p-3 bg-white border rounded-lg shadow-sm">
+    <div className="flex items-center gap-2 p-2 hover:bg-gray-50">
       <input
         type="checkbox"
         checked={todo.completed}
         onChange={() => onToggle(todo.id)}
-        className="h-5 w-5 text-blue-500 rounded focus:ring-blue-500"
+        className="w-5 h-5"
       />
-      <span className={`flex-1 ${todo.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
+      <span className={`flex-1 ${todo.completed ? 'line-through text-gray-500' : ''}`}>
         {todo.text}
       </span>
       <button
         onClick={() => onDelete(todo.id)}
-        className="text-red-500 hover:text-red-600 focus:outline-none"
+        className="text-red-500 hover:text-red-700"
       >
-        <FaTrash />
+        Delete
       </button>
     </div>
-  )
+  );
 }
-
-export default TodoItem

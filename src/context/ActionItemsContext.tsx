@@ -1,13 +1,25 @@
-import { useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ActionItem, Department } from '../types/actionItem';
 
-export const useActionItems = () => {
-  const [department, setDepartment] = useState<Department>({
-    name: '',
-    responsiblePerson: '',
-    date: new Date().toISOString().split('T')[0]
-  });
-  
+interface ActionItemsContextType {
+  department: Department;
+  updateDepartment: (updates: Partial<Department>) => void;
+  actionItems: ActionItem[];
+  addActionItem: () => void;
+  updateActionItem: (id: string, updates: Partial<ActionItem>) => void;
+  deleteActionItem: (id: string) => void;
+}
+
+const defaultDepartment: Department = {
+  name: '',
+  responsiblePerson: '',
+  date: new Date().toISOString().split('T')[0]
+};
+
+const ActionItemsContext = createContext<ActionItemsContextType | undefined>(undefined);
+
+export function ActionItemsProvider({ children }: { children: React.ReactNode }) {
+  const [department, setDepartment] = useState<Department>(defaultDepartment);
   const [actionItems, setActionItems] = useState<ActionItem[]>([]);
 
   useEffect(() => {
@@ -19,6 +31,7 @@ export const useActionItems = () => {
         setDepartment(JSON.parse(storedDepartment));
       } catch (error) {
         console.error('Error parsing stored department:', error);
+        setDepartment(defaultDepartment);
       }
     }
     
@@ -27,6 +40,7 @@ export const useActionItems = () => {
         setActionItems(JSON.parse(storedItems));
       } catch (error) {
         console.error('Error parsing stored items:', error);
+        setActionItems([]);
       }
     }
   }, []);
@@ -67,7 +81,7 @@ export const useActionItems = () => {
     localStorage.setItem('actionItems', JSON.stringify(updatedItems));
   };
 
-  return {
+  const value = {
     department,
     updateDepartment,
     actionItems,
@@ -75,4 +89,18 @@ export const useActionItems = () => {
     updateActionItem,
     deleteActionItem
   };
-};
+
+  return (
+    <ActionItemsContext.Provider value={value}>
+      {children}
+    </ActionItemsContext.Provider>
+  );
+}
+
+export function useActionItems() {
+  const context = useContext(ActionItemsContext);
+  if (context === undefined) {
+    throw new Error('useActionItems must be used within an ActionItemsProvider');
+  }
+  return context;
+}

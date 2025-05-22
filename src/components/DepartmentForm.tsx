@@ -1,12 +1,9 @@
 import React from 'react';
-import { Department } from '../types/actionItem';
+import { useActionItems } from '../context/ActionItemsContext';
 
-interface DepartmentFormProps {
-  department: Department;
-  onUpdate: (updates: Partial<Department>) => void;
-}
+export default function DepartmentForm() {
+  const { department, updateDepartment } = useActionItems();
 
-export default function DepartmentForm({ department, onUpdate }: DepartmentFormProps) {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -17,7 +14,7 @@ export default function DepartmentForm({ department, onUpdate }: DepartmentFormP
           <input
             type="text"
             value={department.name}
-            onChange={(e) => onUpdate({ name: e.target.value })}
+            onChange={(e) => updateDepartment({ name: e.target.value })}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
             placeholder="Enter department name"
           />
@@ -30,7 +27,7 @@ export default function DepartmentForm({ department, onUpdate }: DepartmentFormP
           <input
             type="text"
             value={department.responsiblePerson}
-            onChange={(e) => onUpdate({ responsiblePerson: e.target.value })}
+            onChange={(e) => updateDepartment({ responsiblePerson: e.target.value })}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
             placeholder="Enter responsible person"
           />
@@ -43,7 +40,7 @@ export default function DepartmentForm({ department, onUpdate }: DepartmentFormP
           <input
             type="date"
             value={department.date}
-            onChange={(e) => onUpdate({ date: e.target.value })}
+            onChange={(e) => updateDepartment({ date: e.target.value })}
             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
